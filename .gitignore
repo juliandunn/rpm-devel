@@ -1,0 +1,7 @@
+BUILD/*
+BUILDROOT/*
+review/*
+RPMS/*
+SOURCES/*
+!SOURCES/*.patch
+SRPMS/*
