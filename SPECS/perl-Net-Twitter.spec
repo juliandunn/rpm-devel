@@ -1,6 +1,6 @@
 Name:           perl-Net-Twitter
 Version:        3.18001
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Perl interface to the Twitter API
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -71,14 +71,15 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %check
 env TEST_POD=1 make test
 
-%clean
-
 %files
 %doc Changes README
 %{perl_vendorlib}/*
 %{_mandir}/man3/*
 
 %changelog
+* Tue Mar 27 2012 Julian C. Dunn <jdunn@aquezada.com> 3.18001-3
+- remove unnecessary %clean section
+
 * Fri Mar 23 2012 Julian C. Dunn <jdunn@aquezada.com> 3.18001-2
 - specfile cleanup per review in bz#611372
 
