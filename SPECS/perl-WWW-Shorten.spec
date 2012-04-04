@@ -6,7 +6,6 @@ License:        GPL+ or Artistic
 Group:          Development/Libraries
 URL:            http://search.cpan.org/dist/WWW-Shorten/
 Source0:        http://www.cpan.org/authors/id/D/DA/DAVECROSS/WWW-Shorten-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  perl >= 0:5.006
 BuildRequires:  perl(Config::Auto)
@@ -14,12 +13,14 @@ BuildRequires:  perl(LWP) >= 5.75
 BuildRequires:  perl(LWP::UserAgent) >= 2.023
 BuildRequires:  perl(Module::Build)
 BuildRequires:  perl(Test::More) >= 0.47
+BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
+BuildRequires:  perl(Test::Pod) >= 1.00
 BuildRequires:  perl(URI) >= 1.27
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description
-The function makeashorterlink will call the relevant web site passing it
-your long URL and will return the shorter version.
+A unified interface to various URL shortening services on the web, such as
+TinyURL or makeashorterlink.com.
 
 %prep
 %setup -q -n WWW-Shorten-%{version}
@@ -29,8 +30,6 @@ your long URL and will return the shorter version.
 ./Build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 ./Build install destdir=$RPM_BUILD_ROOT create_packlist=0
 find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 
@@ -39,11 +38,7 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %check
 ./Build test
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %doc Artistic AUTHORS ChangeLog.SPOON Changes COPYING CREDITS LICENCE README TODO
 %{perl_vendorlib}/*
 %{_bindir}/shorten
