@@ -1,6 +1,6 @@
 Name:           twirssi
 Version:        2.5.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An Irssi script to interact with Twitter
 License:        GPLv2
 Group:          Applications/Communications
@@ -20,8 +20,10 @@ Requires:       perl(HTTP::Date)
 Requires:       perl(Irssi)
 Requires:       perl(Irssi::Irc)
 Requires:       perl(JSON::Any)
+Requires:       perl(LWP::Protocol::https)
 Requires:       perl(LWP::Simple)  
 Requires:       perl(Net::Twitter) >= 3.11009
+Requires:       perl(WWW::Shorten)
 
 %description
 Twirssi allows you interact with Twitter and Identi.ca from Irssi. It can
@@ -46,6 +48,9 @@ install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 %doc %{_docdir}/%{name}-%{version}
 
 %changelog
+* Thu Apr 05 2012 Julian C. Dunn <jdunn@aquezada.com> 2.5.1-3
+- Correct missed deps per bz#809948
+
 * Wed Apr 04 2012 Julian C. Dunn <jdunn@aquezada.com> 2.5.1-2
 - Changes per review in bz#808254
 
