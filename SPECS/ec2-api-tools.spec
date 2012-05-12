@@ -1,5 +1,5 @@
 Name:           ec2-api-tools
-Version:        1.5.2.5
+Version:        1.5.3.1
 Release:        1%{?dist}
 Summary:        Amazon EC2 Command-Line Tools
 
@@ -99,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat May 12 2012 Julian Dunn <jdunn@aquezada.com> - 1.5.3.1-1
+- Upgrade to 1.5.3.1, including support for AWS Marketplace.
+
 * Fri Mar 23 2012 Julian Dunn <jdunn@aquezada.com> - 1.5.2.5-1
 - Bump version
 
