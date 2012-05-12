@@ -1,8 +1,8 @@
 Name:           perl-WWW-Shorten
-Version:        3.02
-Release:        2%{?dist}
+Version:        3.03
+Release:        1%{?dist}
 Summary:        Interface to URL shortening sites
-License:        GPL+ or Artistic
+License:        Artistic 2.0
 Group:          Development/Libraries
 URL:            http://search.cpan.org/dist/WWW-Shorten/
 Source0:        http://www.cpan.org/authors/id/D/DA/DAVECROSS/WWW-Shorten-%{version}.tar.gz
@@ -39,16 +39,20 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} $RPM_BUILD_ROOT/*
 
 %check
-./Build test
+./Build test --test_files 't/0*.t t/9*.t'
 
 %files
-%doc Artistic AUTHORS ChangeLog.SPOON Changes COPYING CREDITS LICENCE README TODO
+%doc Artistic AUTHORS ChangeLog.SPOON Changes CREDITS LICENCE README TODO
 %{perl_vendorlib}/*
 %{_bindir}/shorten
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 
 %changelog
+* Sun Apr 08 2012 Julian C. Dunn <jdunn@aquezada.com> 3.03-1
+- Update to 3.03
+- Run only tests that do not require network access
+
 * Thu Apr 05 2012 Julian C. Dunn <jdunn@aquezada.com> 3.02-2
 - Changes per review in bz#810028
 

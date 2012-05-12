@@ -5,3 +5,5 @@ RPMS/*
 SOURCES/*
 !SOURCES/*.patch
 SRPMS/*
+tmp/*
+*.DS_Store
