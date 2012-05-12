@@ -8,6 +8,8 @@ URL:		http://www.floodgap.com/software/ttytter/
 Source0:	http://www.floodgap.com/software/ttytter/dist1/%{version}.txt
 BuildArch:	noarch
 Requires:	curl
+Requires:	perl(Date::Parse)
+Requires:	perl(Date::Format)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description
