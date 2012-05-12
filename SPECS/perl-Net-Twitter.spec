@@ -1,5 +1,5 @@
 Name:           perl-Net-Twitter
-Version:        3.18001
+Version:        3.18002
 Release:        1%{?dist}
 Summary:        Perl interface to the Twitter API
 License:        GPL+ or Artistic
@@ -78,5 +78,8 @@ env TEST_POD=1 make test
 %{_mandir}/man3/*
 
 %changelog
+* Wed Apr 25 2012 Julian C. Dunn <jdunn@aquezada.com> 3.18002-1
+- Upgrade to 3.18002
+
 * Tue Mar 27 2012 Julian C. Dunn <jdunn@aquezada.com> 3.18001-1
 - Initial release.
