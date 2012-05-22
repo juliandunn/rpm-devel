@@ -22,8 +22,6 @@ BuildRequires:  flex >= 2.5.33
 # gecode requires gcc 4.2 or higher
 %if 0%{?rhel} == 5
 BuildRequires:  gcc44 gcc44-c++
-%else
-BuildRequires:  gcc gcc-c++
 %endif
 
 # for documentation
@@ -74,12 +72,14 @@ The %{name}-examples package contains example code for %{name}.
 %patch0 -p1 -b .no_examples
 
 # Fix permissions
-find . -name '*.hh' -o -name '*.hpp' -o -name '*.cpp' -exec chmod 0644 '{}' \;
+find . -name '*.hh' -exec chmod 0644 '{}' \;
+find . -name '*.hpp' -exec chmod 0644 '{}' \;
+find . -name '*.cpp' -exec chmod 0644 '{}' \;
 chmod 0644 LICENSE misc/doxygen/*.png
 
 # Fix encoding
 pushd examples
-for file in black-hole.cpp scowl.hpp word-square.cpp; do
+for file in bin-packing.cpp black-hole.cpp dominating-queens.cpp scowl.hpp word-square.cpp; do
     iconv -f ISO-8859-1 -t UTF-8 -o $file.new $file && \
     touch -r $file $file.new && \
     mv $file.new $file
@@ -150,6 +150,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun May 20 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-1
+- Update for 3.7.3
+
 * Fri Apr 01 2011 Erik Sabowski and James Sulinski <team@aegisco.com> 3.5.0-1
 - Update for gecode-3.5.0
 - Disabled "gist" and "qt" configure options
