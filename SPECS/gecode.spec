@@ -8,21 +8,13 @@ License:        MIT
 URL:            http://www.gecode.org/
 Source0:        http://www.gecode.org/download/%{name}-%{version}.tar.gz
 Patch0:         gecode-3.7.3-no_examples.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  automake bison boost-devel qt-devel
-
-# from epel
-BuildRequires:  graphviz
-
-# for centos5: from aegisco repo
-# repofile: http://rpm.aegisco.com/aegisco/$dist/aegisco.repo
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  boost-devel
 BuildRequires:  flex >= 2.5.33
-
-# gecode requires gcc 4.2 or higher
-%if 0%{?rhel} == 5
-BuildRequires:  gcc44 gcc44-c++
-%endif
+BuildRequires:  graphviz
+BuildRequires:  qt-devel
 
 # for documentation
 BuildRequires:  doxygen tex(latex) tex(dvips)
@@ -92,9 +84,6 @@ aclocal
 autoconf
 
 %configure \
-%if 0%{?rhel} == 5
-  CC=gcc44 CXX=g++44 \
-%endif
   --disable-examples \
   --enable-float-vars \
   --enable-leak-debug \
@@ -109,7 +98,6 @@ mv ChangeLog.new ChangeLog
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
 #move docs and examples to build root
@@ -118,7 +106,6 @@ mv doc/html ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %post -p /sbin/ldconfig
@@ -128,12 +115,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog LICENSE
 %{_libdir}/*.so.*
 
 %files devel
-%defattr(-,root,root,-)
 %{_bindir}/fz
 %{_bindir}/mzn-gecode
 %{_datadir}/%{name}
@@ -141,17 +126,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.so
 
 %files doc
-%defattr(-,root,root,-)
 %{_defaultdocdir}/%{name}-doc-%{version}/html
 
 %files examples
-%defattr(-,root,root,-)
 %doc examples/*
 
 
 %changelog
 * Sun May 20 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-1
 - Update for 3.7.3
+- Drop support for EPEL5. flex is too old
 
 * Fri Apr 01 2011 Erik Sabowski and James Sulinski <team@aegisco.com> 3.5.0-1
 - Update for gecode-3.5.0
