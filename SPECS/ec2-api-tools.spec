@@ -1,5 +1,5 @@
 Name:           ec2-api-tools
-Version:        1.5.3.1
+Version:        1.6.1.2
 Release:        1%{?dist}
 Summary:        Amazon EC2 Command-Line Tools
 
@@ -99,6 +99,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 06 2012 Julian Dunn <jdunn@aquezada.com> - 1.6.1.2-1
+- Upgrade to 1.6.1.2, to support new Amazon Elastic Block Store (EBS)
+  volume type: Provisioned IOPS (input/output operations per second)
+  and the ability to launch selected Amazon EC2 instance types as
+  EBS-Optimized instances.
+
 * Sat May 12 2012 Julian Dunn <jdunn@aquezada.com> - 1.5.3.1-1
 - Upgrade to 1.5.3.1, including support for AWS Marketplace.
 

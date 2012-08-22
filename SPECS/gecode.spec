@@ -1,6 +1,6 @@
 Name:           gecode
 Version:        3.7.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic constraint development environment
 
 Group:          System Environment/Libraries
@@ -28,7 +28,7 @@ performance while being modular and extensible.
 %package devel
 Summary:        Development files for %{name}
 Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for
@@ -126,13 +126,16 @@ mv doc/html ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
 %{_libdir}/*.so
 
 %files doc
-%{_defaultdocdir}/%{name}-doc-%{version}/html
+%{_defaultdocdir}/%{name}-doc-%{version}
 
 %files examples
 %doc examples/*
 
 
 %changelog
+* Tue Aug 21 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-2
+- Post-review comments in bz#843695
+
 * Sun May 20 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-1
 - Update for 3.7.3
 - Drop support for EPEL5. flex is too old
