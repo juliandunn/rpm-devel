@@ -1,6 +1,6 @@
 Name:           gecode
 Version:        3.7.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic constraint development environment
 
 Group:          System Environment/Libraries
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  boost-devel
 BuildRequires:  flex >= 2.5.33
 BuildRequires:  graphviz
-BuildRequires:  qt-devel
+BuildRequires:  qt4-devel
 
 # for documentation
 BuildRequires:  doxygen tex(latex) tex(dvips)
@@ -131,8 +131,10 @@ mv doc/html ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
 %files examples
 %doc examples/*
 
-
 %changelog
+* Wed Aug 23 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-3
+- Fix build on EPEL6
+
 * Tue Aug 21 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-2
 - Post-review comments in bz#843695
 
