@@ -1,5 +1,5 @@
 Name:           ec2-api-tools
-Version:        1.6.1.2
+Version:        1.6.12.0
 Release:        1%{?dist}
 Summary:        Amazon EC2 Command-Line Tools
 
@@ -13,13 +13,17 @@ Source0:        http://s3.amazonaws.com/ec2-downloads/%{name}.zip
 Source1:        ec2-cmd
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if 0%{?fedora} < 20
+Requires:       javapackages-tools
+%else
 Requires:       jpackage-utils
+%endif
 Requires:       java >= 1.5
-Requires:       jakarta-commons-cli 
+Requires:       apache-commons-cli 
 Requires:       commons-codec 
-Requires:       jakarta-commons-discovery 
+Requires:       apache-commons-discovery 
 Requires:       commons-httpclient 
-Requires:       jakarta-commons-logging 
+Requires:       apache-commons-logging
 Requires:       bcprov 
 Requires:       bea-stax-api 
 Requires:       javamail 
@@ -99,6 +103,19 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Dec 20 2013 Julian Dunn <jdunn@aquezada.com> - 1.6.12.0-1
+- Upgrade to 1.6.12.0
+- Remove dep on jpackage-utils
+
+* Wed Jul 03 2013 Julian Dunn <jdunn@aquezada.com> - 1.6.7.4-1
+- Upgrade to 1.6.7.4
+
+* Tue Jan 15 2013 Julian Dunn <jdunn@aquezada.com> - 1.6.6.0-1
+- Upgrade to 1.6.6.0
+
+* Thu Sep 20 2012 Julian Dunn <jdunn@aquezada.com> - 1.6.3.0-1
+- Upgrade to 1.6.3.0
+
 * Mon Aug 06 2012 Julian Dunn <jdunn@aquezada.com> - 1.6.1.2-1
 - Upgrade to 1.6.1.2, to support new Amazon Elastic Block Store (EBS)
   volume type: Provisioned IOPS (input/output operations per second)
@@ -119,7 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Feb 23 2011 Julian Dunn <jdunn@aquezada.com> - 1.3.62308-1
 - Rebuilt for 62308, VM import
 
-* Wed Nov 04 2010 Julian Dunn <jdunn@aquezada.com> - 1.3.57419-1
+* Thu Nov 04 2010 Julian Dunn <jdunn@aquezada.com> - 1.3.57419-1
 - Rebuilt for 57419, Tagging, Filtering, Import Key Pair, and Idempotency.
 
 * Sat Aug 21 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 1.3.53907-3

@@ -1,13 +1,13 @@
 Name:           gecode
-Version:        3.7.3
-Release:        3%{?dist}
+Version:        4.2.1
+Release:        1%{?dist}
 Summary:        Generic constraint development environment
 
 Group:          System Environment/Libraries
 License:        MIT
 URL:            http://www.gecode.org/
-Source0:        http://www.gecode.org/download/%{name}-%{version}.tar.gz
-Patch0:         gecode-3.7.3-no_examples.patch
+Source0:        http://www.gecode.org/download/%{name}-%{version}.7z
+Patch0:         gecode-4.0.0-no_examples.patch
 
 BuildRequires:  automake
 BuildRequires:  bison
@@ -15,6 +15,10 @@ BuildRequires:  boost-devel
 BuildRequires:  flex >= 2.5.33
 BuildRequires:  graphviz
 BuildRequires:  qt4-devel
+BuildRequires:  p7zip
+
+# Fedora < 20 doesn't have this macro
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 # for documentation
 BuildRequires:  doxygen tex(latex) tex(dvips)
@@ -101,8 +105,8 @@ mv ChangeLog.new ChangeLog
 make install DESTDIR=$RPM_BUILD_ROOT
 
 #move docs and examples to build root
-mkdir -p ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
-mv doc/html ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
+mkdir -p ${RPM_BUILD_ROOT}%{_pkgdocdir}
+mv doc/html ${RPM_BUILD_ROOT}%{_pkgdocdir}
 
 
 %clean
@@ -117,22 +121,44 @@ mv doc/html ${RPM_BUILD_ROOT}%{_defaultdocdir}/%{name}-doc-%{version}
 %files
 %doc ChangeLog LICENSE
 %{_libdir}/*.so.*
+%exclude %{_pkgdocdir}/html
 
 %files devel
-%{_bindir}/fz
+%{_bindir}/fzn-gecode
 %{_bindir}/mzn-gecode
 %{_datadir}/%{name}
 %{_includedir}/%{name}
 %{_libdir}/*.so
 
 %files doc
-%{_defaultdocdir}/%{name}-doc-%{version}
+%{_pkgdocdir}
+%exclude %{_pkgdocdir}/ChangeLog
+%exclude %{_pkgdocdir}/LICENSE
 
 %files examples
 %doc examples/*
 
 %changelog
-* Wed Aug 23 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-3
+* Sat Nov 16 2013 Julian C. Dunn <jdunn@aquezada.com> 4.2.1-1
+- Update to 4.2.1
+
+* Fri Aug 23 2013 Julian C. Dunn <jdunn@aquezada.com> 4.2.0-1
+- Update to 4.2.0
+- Switch to unversioned docdir for >= F20 (bz#993768)
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.0.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Tue Jul 30 2013 Petr Machata <pmachata@redhat.com> - 4.0.0-2
+- Rebuild for boost 1.54.0
+
+* Sat Jun 15 2013 Julian C. Dunn <jdunn@aquezada.com> 4.0.0-1
+- Update to 4.0.0
+
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.7.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Thu Aug 23 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-3
 - Fix build on EPEL6
 
 * Tue Aug 21 2012 Julian C. Dunn <jdunn@aquezada.com> 3.7.3-2
