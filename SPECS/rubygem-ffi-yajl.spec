@@ -9,6 +9,7 @@ Group: Development/Languages
 License: Apache-2.0
 URL: http://github.com/lamont-granquist/ffi-yajl
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Patch0: ffi-yajl.gemspec.patch
 Requires: ruby(release)
 Requires: ruby(rubygems) 
 Requires: rubygem(ffi)
@@ -38,6 +39,13 @@ gem unpack %{SOURCE0}
 %setup -q -D -T -n  %{gem_name}-%{version}
 
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
+%patch0 -p1
+# Older FFI in Fedora, q.v. 1060146
+sed -i -e 's|%q<ffi>, \["~> 1.9"\]|%q<ffi>|g' %{gem_name}.gemspec
+
+# Doubly make sure the vendored libyajl is trashed
+rm -rf ext/libyajl2/vendored
+rm -f lib/libyajl_s.a lib/libyajl.so*
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -52,9 +60,9 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -pa .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
-mkdir -p %{buildroot}%{gem_extdir_mri}/lib
-# Not sure I need to do this?
-mv %{buildroot}%{gem_instdir}/lib/libyajl.so %{buildroot}%{gem_extdir_mri}/lib/
+mkdir -p %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
+mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/parser.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
+mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/encoder.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
 
 mkdir -p %{buildroot}%{_bindir}
 cp -pa .%{_bindir}/* \
@@ -69,7 +77,7 @@ popd
 
 %files
 %dir %{gem_instdir}
-%{_bindir}/ffi-yajl-bench
+%exclude %{_bindir}/ffi-yajl-bench
 %{gem_instdir}/bin
 %{gem_libdir}
 %exclude %{gem_instdir}/ext
