@@ -3,25 +3,16 @@
 %global gem_name chef-zero
 
 Name: rubygem-%{gem_name}
-Version: 2.0.2
+Version: 2.1.5
 Release: 1%{?dist}
-Summary: Self-contained, easy-setup, fast-start in-memory Chef server for testing and solo setup purposes
+Summary: Self-contained in-memory Chef server for testing and solo setup purposes
 Group: Development/Languages
-License: Apache 2.0
-URL: http://www.opscode.com
+License: ASL 2.0
+URL: https://github.com/opscode/chef-zero
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-Requires: ruby(release)
-Requires: ruby(rubygems)
-Requires: rubygem(mixlib-log)
-Requires: rubygem(hashie)
-Requires: rubygem(json)
-Requires: rubygem(rack)
-BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
-BuildRequires: ruby
 %{!?el6:BuildRequires: rubygem(rspec)}
 BuildArch: noarch
-Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Self-contained, easy-setup, fast-start in-memory Chef server for testing and
@@ -47,8 +38,6 @@ gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 # Create the gem as gem install only works on a gem file
 gem build %{gem_name}.gemspec
 
-# %%gem_install compiles any C extensions and installs the gem into ./%gem_dir
-# by default, so that we can move it into the buildroot in %%install
 %gem_install
 
 %install
@@ -75,6 +64,7 @@ popd
 %dir %{gem_instdir}
 %{_bindir}/chef-zero
 %{gem_instdir}/bin
+%doc %{gem_instdir}/LICENSE
 %{gem_libdir}
 %exclude %{gem_cache}
 %exclude %{gem_instdir}/spec
@@ -82,10 +72,12 @@ popd
 
 %files doc
 %doc %{gem_docdir}
-%doc %{gem_instdir}/LICENSE
 %doc %{gem_instdir}/README.md
 %doc %{gem_instdir}/Rakefile
 
 %changelog
+* Thu Jun 05 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.1.5-1
+- Update to 2.1.5
+
 * Thu Mar 20 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.0.2-1
 - Initial package
