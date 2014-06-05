@@ -1,5 +1,5 @@
 Name:           ec2-api-tools
-Version:        1.6.12.0
+Version:        1.6.14.1
 Release:        1%{?dist}
 Summary:        Amazon EC2 Command-Line Tools
 
