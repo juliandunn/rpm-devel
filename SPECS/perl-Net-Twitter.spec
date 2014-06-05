@@ -1,5 +1,5 @@
 Name:           perl-Net-Twitter
-Version:        4.01003
+Version:        4.01004
 Release:        1%{?dist}
 Summary:        Perl interface to the Twitter API
 License:        GPL+ or Artistic
@@ -76,6 +76,9 @@ http://dev.twitter.com/doc for a full description of the Twitter APIs.
 %{_mandir}/man3/*
 
 %changelog
+* Mon Apr 14 2014 Julian C. Dunn <jdunn@aquezada.com> - 4.01004-1
+- Upgrade to 4.01004 (bz#1087334)
+
 * Sat Mar 15 2014 Julian C. Dunn <jdunn@aquezada.com> - 4.01003-1
 - Upgrade to 4.01003 (bz#1076563)
 
