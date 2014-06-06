@@ -10,9 +10,18 @@ Group: Development/Languages
 License: ASL 2.0
 URL: https://github.com/opscode/chef-zero
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(release)
+Requires: ruby(rubygems)
+Requires: rubygem(mixlib-log)
+Requires: rubygem(hashie)
+Requires: rubygem(json)
+Requires: rubygem(rack)
+BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
+BuildRequires: ruby
 %{!?el6:BuildRequires: rubygem(rspec)}
 BuildArch: noarch
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Self-contained, easy-setup, fast-start in-memory Chef server for testing and
