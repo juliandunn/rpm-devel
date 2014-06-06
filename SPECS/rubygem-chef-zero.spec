@@ -4,19 +4,19 @@
 
 Name: rubygem-%{gem_name}
 Version: 2.1.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Self-contained in-memory Chef server for testing and solo setup purposes
 Group: Development/Languages
 License: ASL 2.0
 URL: https://github.com/opscode/chef-zero
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-Requires: ruby(release)
+%{!?el6:Requires: ruby(release)}
 Requires: ruby(rubygems)
 Requires: rubygem(mixlib-log)
 Requires: rubygem(hashie)
 Requires: rubygem(json)
 Requires: rubygem(rack)
-BuildRequires: ruby(release)
+%{!?el6:BuildRequires: ruby(release)}
 BuildRequires: rubygems-devel
 BuildRequires: ruby
 %{!?el6:BuildRequires: rubygem(rspec)}
@@ -85,6 +85,9 @@ popd
 %doc %{gem_instdir}/Rakefile
 
 %changelog
+* Fri Jun 06 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.1.5-2
+- Fix build on EL6
+
 * Thu Jun 05 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.1.5-1
 - Update to 2.1.5
 
