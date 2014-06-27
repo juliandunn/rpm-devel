@@ -3,8 +3,8 @@
 %global gem_name chef-zero
 
 Name: rubygem-%{gem_name}
-Version: 2.1.5
-Release: 2%{?dist}
+Version: 2.2
+Release: 1%{?dist}
 Summary: Self-contained in-memory Chef server for testing and solo setup purposes
 Group: Development/Languages
 License: ASL 2.0
@@ -85,6 +85,9 @@ popd
 %doc %{gem_instdir}/Rakefile
 
 %changelog
+* Sat Jun 21 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.2-2
+- Update to 2.2 (bz#1111886)
+
 * Fri Jun 06 2014 Julian C. Dunn <jdunn@aquezada.com> - 2.1.5-2
 - Fix build on EL6
 
