@@ -1,0 +1,49 @@
+diff -Nur ffi-yajl-0.2.0.old/spec/ffi_yajl/json_gem_spec.rb ffi-yajl-0.2.0/spec/ffi_yajl/json_gem_spec.rb
+--- ffi-yajl-0.2.0.old/spec/ffi_yajl/json_gem_spec.rb	2014-06-27 02:20:31.000000000 +0000
++++ ffi-yajl-0.2.0/spec/ffi_yajl/json_gem_spec.rb	2014-06-27 03:43:41.000000000 +0000
+@@ -11,8 +11,8 @@
+ 
+   # Magic to make the before loading tests actually run before loading
+   RSpec.configure do |config|
+-    config.register_ordering(:global) do |list|
+-      list.sort_by { |item| item.description }
++    config.order_groups_and_examples do |groups_or_examples|
++      groups_or_examples.sort_by { |item| item.description }
+     end
+   end
+ 
+@@ -62,7 +62,7 @@
+     end
+ 
+     it "should define JSON class" do
+-      expect(defined?(JSON)).to be_truthy
++      expect(defined?(JSON)).to be_true
+     end
+ 
+     it "should implement JSON#parse" do
+diff -Nur ffi-yajl-0.2.0.old/spec/ffi_yajl/parser_spec.rb ffi-yajl-0.2.0/spec/ffi_yajl/parser_spec.rb
+--- ffi-yajl-0.2.0.old/spec/ffi_yajl/parser_spec.rb	2014-06-27 02:20:31.000000000 +0000
++++ ffi-yajl-0.2.0/spec/ffi_yajl/parser_spec.rb	2014-06-27 03:36:31.000000000 +0000
+@@ -171,7 +171,7 @@
+ 
+       context "when passing a block" do
+         it "should parse correctly" do
+-          skip "handle blocks"
++          pending "handle blocks"
+           output = nil
+           parser do |obj|
+             output = obj
+@@ -211,11 +211,11 @@
+               Encoding.default_internal = @saved_encoding
+             end
+             it "encodes keys to #{encoding}" do
+-              skip "fix us-ascii" if encoding == "us-ascii"
++              pending "fix us-ascii" if encoding == "us-ascii"
+               expect(parser.keys.first.encoding).to eql(Encoding.find(encoding))
+             end
+             it "encodes values to #{encoding}" do
+-              skip "fix us-ascii" if encoding == "us-ascii"
++              pending "fix us-ascii" if encoding == "us-ascii"
+               expect(parser.values.first.encoding).to eql(Encoding.find(encoding))
+             end
+           end

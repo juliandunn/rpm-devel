@@ -2,14 +2,17 @@
 %global gem_name ffi-yajl
 
 Name: rubygem-%{gem_name}
-Version: 0.0.4
+Version: 0.2.0
 Release: 1%{?dist}
 Summary: Ruby FFI wrapper around YAJL 2.x
 Group: Development/Languages
 License: Apache-2.0
-URL: http://github.com/lamont-granquist/ffi-yajl
+URL: https://github.com/lamont-granquist/ffi-yajl
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0: ffi-yajl.gemspec.patch
+Patch1: ffi-yajl.extconf.rb.patch
+Patch2: ffi-yajl.vendoring.patch
+Patch3: ffi-yajl.old-rspec.patch
 Requires: ruby(release)
 Requires: ruby(rubygems) 
 Requires: rubygem(ffi)
@@ -17,6 +20,7 @@ Requires: yajl
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel 
 BuildRequires: rubygem(rspec)
+BuildRequires: rubygem(ffi)
 BuildRequires: ruby-devel 
 BuildRequires: yajl-devel
 Provides: rubygem(%{gem_name}) = %{version}
@@ -40,12 +44,9 @@ gem unpack %{SOURCE0}
 
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 %patch0 -p1
-# Older FFI in Fedora, q.v. 1060146
-sed -i -e 's|%q<ffi>, \["~> 1.9"\]|%q<ffi>|g' %{gem_name}.gemspec
-
-# Doubly make sure the vendored libyajl is trashed
-rm -rf ext/libyajl2/vendored
-rm -f lib/libyajl_s.a lib/libyajl.so*
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -93,5 +94,8 @@ popd
 %doc %{gem_instdir}/LICENSE
 
 %changelog
+* Thu Jun 26 2014 Julian C. Dunn (<jdunn@aquezada.com>) - 0.2.0-1
+- Update to 0.2.0
+
 * Sat Mar 22 2014 Julian C. Dunn (<jdunn@aquezada.com>) - 0.0.4-1
 - Initial package

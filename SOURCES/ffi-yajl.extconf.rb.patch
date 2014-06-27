@@ -1,0 +1,58 @@
+diff -Nur ffi-yajl-0.2.0.old/ext/ffi_yajl/ext/encoder/extconf.rb ffi-yajl-0.2.0/ext/ffi_yajl/ext/encoder/extconf.rb
+--- ffi-yajl-0.2.0.old/ext/ffi_yajl/ext/encoder/extconf.rb	2014-06-27 02:20:31.000000000 +0000
++++ ffi-yajl-0.2.0/ext/ffi_yajl/ext/encoder/extconf.rb	2014-06-27 03:23:35.000000000 +0000
+@@ -1,16 +1,8 @@
+ require 'mkmf'
+ require 'rubygems'
+-require 'libyajl2'
+ 
+ RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
+ 
+-# pick up the vendored libyajl2 out of the libyajl2 gem
+-$CFLAGS = " -I#{Libyajl2.include_path} #{$CFLAGS}"
+-$LDFLAGS = " -L#{Libyajl2.opt_path} #{$LDFLAGS}"
+-
+-puts $CFLAGS
+-puts $LDFLAGS
+-
+ # except if you're doing an unoptimized gcc install we're going to help you out a bit
+ if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc|clang/
+   $CFLAGS << " -O3" unless $CFLAGS[/-O\d/]
+@@ -26,6 +18,8 @@
+ if windows?
+   # include our libyajldll.a definitions on windows in the libyajl2 gem
+   $libs = "#{$libs} -lyajldll"
++else
++  $libs = "#{$libs} -lyajl"
+ end
+ 
+ dir_config 'encoder'
+diff -Nur ffi-yajl-0.2.0.old/ext/ffi_yajl/ext/parser/extconf.rb ffi-yajl-0.2.0/ext/ffi_yajl/ext/parser/extconf.rb
+--- ffi-yajl-0.2.0.old/ext/ffi_yajl/ext/parser/extconf.rb	2014-06-27 02:20:31.000000000 +0000
++++ ffi-yajl-0.2.0/ext/ffi_yajl/ext/parser/extconf.rb	2014-06-27 03:23:51.000000000 +0000
+@@ -1,16 +1,8 @@
+ require 'mkmf'
+ require 'rubygems'
+-require 'libyajl2'
+ 
+ RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
+ 
+-# pick up the vendored libyajl2 out of the libyajl2 gem
+-$CFLAGS = "-I#{Libyajl2.include_path} #{$CFLAGS}"
+-$LDFLAGS = "-L#{Libyajl2.opt_path} #{$LDFLAGS}"
+-
+-puts $CFLAGS
+-puts $LDFLAGS
+-
+ # except if you're doing an unoptimized gcc install we're going to help you out a bit
+ if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc|clang/
+   $CFLAGS << " -O3" unless $CFLAGS[/-O\d/]
+@@ -26,6 +18,8 @@
+ if windows?
+   # include our libyajldll.a definitions on windows in the libyajl2 gem
+   $libs = "#{$libs} -lyajldll"
++else
++  $libs = "#{$libs} -lyajl"
+ end
+ 
+ dir_config 'parser'
