@@ -1,0 +1,40 @@
+--- ohai-7.0.4.old/ohai.gemspec	2014-06-27 05:32:05.000000000 +0000
++++ ohai-7.0.4/ohai.gemspec	2014-06-27 05:35:19.000000000 +0000
+@@ -22,10 +22,9 @@
+ 
+     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+       s.add_runtime_dependency(%q<mime-types>, ["~> 1.16"])
+-      s.add_runtime_dependency(%q<systemu>, ["~> 2.5.2"])
+-      s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
++      s.add_runtime_dependency(%q<systemu>, ["~> 2.6.4"])
+       s.add_runtime_dependency(%q<mixlib-cli>, [">= 0"])
+-      s.add_runtime_dependency(%q<mixlib-config>, ["~> 2.0"])
++      s.add_runtime_dependency(%q<mixlib-config>, [">= 0"])
+       s.add_runtime_dependency(%q<mixlib-log>, [">= 0"])
+       s.add_runtime_dependency(%q<mixlib-shellout>, ["~> 1.2"])
+       s.add_runtime_dependency(%q<ipaddress>, [">= 0"])
+@@ -37,10 +36,10 @@
+       s.add_development_dependency(%q<chef>, [">= 0"])
+     else
+       s.add_dependency(%q<mime-types>, ["~> 1.16"])
+-      s.add_dependency(%q<systemu>, ["~> 2.5.2"])
+-      s.add_dependency(%q<yajl-ruby>, [">= 0"])
++      s.add_dependency(%q<systemu>, ["~> 2.6.4"])
++      s.add_dependency(%q<ffi-yajl>, [">= 0"])
+       s.add_dependency(%q<mixlib-cli>, [">= 0"])
+-      s.add_dependency(%q<mixlib-config>, ["~> 2.0"])
++      s.add_dependency(%q<mixlib-config>, [">= 0"])
+       s.add_dependency(%q<mixlib-log>, [">= 0"])
+       s.add_dependency(%q<mixlib-shellout>, ["~> 1.2"])
+       s.add_dependency(%q<ipaddress>, [">= 0"])
+@@ -53,8 +52,8 @@
+     end
+   else
+     s.add_dependency(%q<mime-types>, ["~> 1.16"])
+-    s.add_dependency(%q<systemu>, ["~> 2.5.2"])
+-    s.add_dependency(%q<yajl-ruby>, [">= 0"])
++    s.add_dependency(%q<systemu>, ["~> 2.6.4"])
++    s.add_dependency(%q<ffi-yajl>, [">= 0"])
+     s.add_dependency(%q<mixlib-cli>, [">= 0"])
+     s.add_dependency(%q<mixlib-config>, ["~> 2.0"])
+     s.add_dependency(%q<mixlib-log>, [">= 0"])

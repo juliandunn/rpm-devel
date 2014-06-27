@@ -1,0 +1,127 @@
+diff -Nur ohai-7.0.4.old/lib/ohai/hints.rb ohai-7.0.4/lib/ohai/hints.rb
+--- ohai-7.0.4.old/lib/ohai/hints.rb	2014-06-27 05:24:14.000000000 +0000
++++ ohai-7.0.4/lib/ohai/hints.rb	2014-06-27 05:25:02.000000000 +0000
+@@ -17,6 +17,8 @@
+ # limitations under the License.
+ #
+ 
++require 'ffi_yajl'
++
+ module Ohai
+   module Hints
+     def self.refresh_hints
+@@ -31,12 +33,12 @@
+         filename = File.join(path, "#{name}.json")
+         if File.exist?(filename)
+           begin
+-            json_parser = Yajl::Parser.new
++            json_parser = FFI_Yajl::Parser.new
+             hash = json_parser.parse(File.read(filename))
+             @hints[name] = hash || Hash.new # hint
+             # should exist because the file did, even if it didn't
+             # contain anything
+-          rescue Yajl::ParseError => e
++          rescue FFI_Yajl::ParseError => e
+             Ohai::Log.error("Could not parse hint file at #{filename}: #{e.message}")
+           end
+         end
+diff -Nur ohai-7.0.4.old/lib/ohai/mixin/ec2_metadata.rb ohai-7.0.4/lib/ohai/mixin/ec2_metadata.rb
+--- ohai-7.0.4.old/lib/ohai/mixin/ec2_metadata.rb	2014-06-27 05:24:14.000000000 +0000
++++ ohai-7.0.4/lib/ohai/mixin/ec2_metadata.rb	2014-06-27 05:25:35.000000000 +0000
+@@ -154,7 +154,7 @@
+           if key[-1..-1] != '/'
+             data = metadata_get("#{id}#{key}", api_version).body
+             json = StringIO.new(data)
+-            parser = Yajl::Parser.new
++            parser = FFI_Yajl::Parser.new
+             metadata[metadata_key(key)] = parser.parse(json)
+           elsif not key.eql?('/')
+             metadata[key[0..-2]] = fetch_json_dir_metadata("#{id}#{key}", api_version)
+diff -Nur ohai-7.0.4.old/lib/ohai/mixin/gce_metadata.rb ohai-7.0.4/lib/ohai/mixin/gce_metadata.rb
+--- ohai-7.0.4.old/lib/ohai/mixin/gce_metadata.rb	2014-06-27 05:24:14.000000000 +0000
++++ ohai-7.0.4/lib/ohai/mixin/gce_metadata.rb	2014-06-27 05:25:02.000000000 +0000
+@@ -58,10 +58,10 @@
+         uri = "#{GCE_METADATA_URL}/#{id}"
+         response = http_client.get(uri)
+         return nil unless response.code == "200"
+-        
++
+         if json?(response.body)
+           data = StringIO.new(response.body)
+-          parser = Yajl::Parser.new
++          parser = FFI_Yajl::Parser.new
+           parser.parse(data)
+         elsif  has_trailing_slash?(id) or (id == '')
+           temp={}
+@@ -76,15 +76,15 @@
+ 
+       def json?(data)
+         data = StringIO.new(data)
+-        parser = Yajl::Parser.new
++        parser = FFI_Yajl::Parser.new
+         begin
+           parser.parse(data)
+           true
+-        rescue Yajl::ParseError
++        rescue FFI_Yajl::ParseError
+           false
+         end
+       end
+-    
++
+       def multiline?(data)
+         data.lines.to_a.size > 1
+       end
+diff -Nur ohai-7.0.4.old/lib/ohai/plugins/rackspace.rb ohai-7.0.4/lib/ohai/plugins/rackspace.rb
+--- ohai-7.0.4.old/lib/ohai/plugins/rackspace.rb	2014-06-27 05:24:14.000000000 +0000
++++ ohai-7.0.4/lib/ohai/plugins/rackspace.rb	2014-06-27 05:25:02.000000000 +0000
+@@ -102,7 +102,7 @@
+       so.stdout.split("\n").map{|l| l.split('=').first.strip }.map do |item|
+         _so = shell_out("xenstore-read vm-data/networking/#{item}")
+         if _so.exitstatus == 0
+-          networks.push(Yajl::Parser.new.parse(_so.stdout))
++          networks.push(FFI_Yajl::Parser.new.parse(_so.stdout))
+         else
+           raise Ohai::Exceptions::Exec
+         end
+diff -Nur ohai-7.0.4.old/lib/ohai/system.rb ohai-7.0.4/lib/ohai/system.rb
+--- ohai-7.0.4.old/lib/ohai/system.rb	2014-06-27 05:24:14.000000000 +0000
++++ ohai-7.0.4/lib/ohai/system.rb	2014-06-27 05:25:02.000000000 +0000
+@@ -29,7 +29,7 @@
+ require 'ohai/hints'
+ require 'mixlib/shellout'
+ 
+-require 'yajl'
++require 'ffi_yajl'
+ 
+ module Ohai
+   class System
+@@ -173,14 +173,14 @@
+     # Serialize this object as a hash
+     #
+     def to_json
+-      Yajl::Encoder.new.encode(@data)
++      FFI_Yajl::Encoder.new.encode(@data)
+     end
+ 
+     #
+     # Pretty Print this object as JSON
+     #
+     def json_pretty_print(item=nil)
+-      Yajl::Encoder.new(:pretty => true).encode(item || @data)
++      FFI_Yajl::Encoder.new(:pretty => true).encode(item || @data)
+     end
+ 
+     def attributes_print(a)
+diff -Nur ohai-7.0.4.old/spec/unit/plugins/gce_spec.rb ohai-7.0.4/spec/unit/plugins/gce_spec.rb
+--- ohai-7.0.4.old/spec/unit/plugins/gce_spec.rb	2014-06-27 05:24:15.000000000 +0000
++++ ohai-7.0.4/spec/unit/plugins/gce_spec.rb	2014-06-27 05:25:11.000000000 +0000
+@@ -72,7 +72,7 @@
+       File.stub(:exist?).with('/etc/chef/ohai/hints/gce.json').and_return(false)
+       File.stub(:exist?).with('C:\chef\ohai\hints/gce.json').and_return(false)
+ 
+-      # Raise Errno::ENOENT to simulate the scenario in which metadata server 
++      # Raise Errno::ENOENT to simulate the scenario in which metadata server
+       # can not be connected
+       t = double("connection")
+       t.stub(:connect_nonblock).and_raise(Errno::ENOENT)
