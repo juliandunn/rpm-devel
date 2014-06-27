@@ -61,13 +61,18 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -pa .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
-mkdir -p %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
-mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/parser.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
-mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/encoder.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
-
+# If there were programs installed:
 mkdir -p %{buildroot}%{_bindir}
-cp -pa .%{_bindir}/* \
-        %{buildroot}%{_bindir}/
+cp -pa ./%{_bindir}/* %{buildroot}%{_bindir}
+
+# If there are C extensions, copy them to the extdir.
+%if 0%{?fedora} >= 21
+mkdir -p %{buildroot}%{gem_extdir_mri}
+cp -a .%{gem_extdir_mri}/{gem.build_complete,*.so} %{buildroot}%{gem_extdir_mri}/
+%else
+mkdir -p %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
+mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/*.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
+%endif
 
 find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
 
@@ -78,7 +83,7 @@ popd
 
 %files
 %dir %{gem_instdir}
-%exclude %{_bindir}/ffi-yajl-bench
+%exclude %{gem_instdir}/bin/ffi-yajl-bench
 %{gem_instdir}/bin
 %{gem_libdir}
 %exclude %{gem_instdir}/ext
