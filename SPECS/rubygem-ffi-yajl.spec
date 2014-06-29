@@ -6,20 +6,19 @@ Version: 0.2.0
 Release: 1%{?dist}
 Summary: Ruby FFI wrapper around YAJL 2.x
 Group: Development/Languages
-License: Apache-2.0
+License: ASL 2.0
 URL: https://github.com/lamont-granquist/ffi-yajl
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0: ffi-yajl.gemspec.patch
 Patch1: ffi-yajl.extconf.rb.patch
 Patch2: ffi-yajl.vendoring.patch
 Patch3: ffi-yajl.old-rspec.patch
-Requires: ruby(release)
+%{!?el6:Requires: ruby(release)}
 Requires: ruby(rubygems) 
-Requires: rubygem(ffi)
 Requires: yajl
-BuildRequires: ruby(release)
+%{!?el6:BuildRequires: ruby(release)}
 BuildRequires: rubygems-devel 
-BuildRequires: rubygem(rspec)
+%{!?el6:BuildRequires: rubygem(rspec)}
 BuildRequires: rubygem(ffi)
 BuildRequires: ruby-devel 
 BuildRequires: yajl-devel
@@ -68,7 +67,7 @@ cp -pa ./%{_bindir}/* %{buildroot}%{_bindir}
 # If there are C extensions, copy them to the extdir.
 %if 0%{?fedora} >= 21
 mkdir -p %{buildroot}%{gem_extdir_mri}
-cp -a .%{gem_extdir_mri}/{gem.build_complete,*.so} %{buildroot}%{gem_extdir_mri}/
+cp -a .%{gem_extdir_mri}/{gem.build_complete,ffi_yajl/ext/*.so} %{buildroot}%{gem_extdir_mri}/
 %else
 mkdir -p %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
 mv %{buildroot}%{gem_instdir}/lib/ffi_yajl/ext/*.so %{buildroot}%{gem_extdir_mri}/lib/ffi_yajl/ext
@@ -83,8 +82,10 @@ popd
 
 %files
 %dir %{gem_instdir}
+%exclude %{_bindir}/ffi-yajl-bench
 %exclude %{gem_instdir}/bin/ffi-yajl-bench
-%{gem_instdir}/bin
+%exclude %{gem_instdir}/lib/ffi_yajl/benchmark
+%exclude %{gem_instdir}/lib/ffi_yajl/ext/.keep
 %{gem_libdir}
 %exclude %{gem_instdir}/ext
 %{gem_extdir_mri}
