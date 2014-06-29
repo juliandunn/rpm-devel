@@ -19,6 +19,9 @@ Requires: rubygem(rack)
 %{!?el6:BuildRequires: ruby(release)}
 BuildRequires: rubygems-devel
 BuildRequires: ruby
+BuildRequires: rubygem(rack)
+BuildRequires: rubygem(mixlib-log)
+BuildRequires: rubygem(hashie)
 %{!?el6:BuildRequires: rubygem(rspec)}
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
