@@ -21,20 +21,31 @@ Requires: rubygem(mixlib-config)
 Requires: rubygem(mixlib-log) 
 Requires: rubygem(mixlib-shellout)
 Requires: rubygem(ipaddress) 
+Requires: rubygem(mime-types)
+Requires: rubygem(systemu)
+# yajl-devel provides the libyajl.so symlink that makes
+# FFI work
+Requires: yajl-devel
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel 
 BuildRequires: ruby 
-# BuildRequires: rubygem(rspec-core) 
-# BuildRequires: rubygem(rspec-expectations) 
-# BuildRequires: rubygem(rspec-mocks) 
-# BuildRequires: rubygem(rspec_junit_formatter) 
-# BuildRequires: rubygem(chef) 
+BuildRequires: rubygem-rspec
+BuildRequires: rubygem(ffi-yajl)
+BuildRequires: rubygem(mixlib-cli)
+BuildRequires: rubygem(mixlib-config)
+BuildRequires: rubygem(mixlib-log)
+BuildRequires: rubygem(mixlib-shellout)
+BuildRequires: rubygem(ipaddress)
+# only needed to run Darwin unit tests
+BuildRequires: rubygem(plist)
+BuildRequires: rubygem(mime-types)
+BuildRequires: rubygem(systemu)
+BuildRequires: yajl-devel
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Ohai profiles your system and emits JSON.
-
 
 %package doc
 Summary: Documentation for %{name}
@@ -71,6 +82,11 @@ cp -a .%{gem_dir}/* \
 mkdir -p %{buildroot}%{_bindir}
 cp -pa ./%{_bindir}/* %{buildroot}%{_bindir}
 
+# Move the ohai man page to the right location
+mkdir -p %{buildroot}%{_mandir}/man1
+gzip %{buildroot}%{gem_instdir}/docs/man/man1/ohai.1
+mv %{buildroot}%{gem_instdir}/docs/man/man1/ohai.1.gz %{buildroot}%{_mandir}/man1
+
 # Run the test suite
 %check
 pushd .%{gem_instdir}
@@ -81,8 +97,7 @@ popd
 %dir %{gem_instdir}
 %{_bindir}/ohai
 %{gem_instdir}/bin
-# XXX what to do with this?
-%doc %{gem_instdir}/docs/man/man1/ohai.1
+%doc %{_mandir}/man1/ohai.1.gz
 %{gem_libdir}
 %exclude %{gem_cache}
 %{gem_spec}
