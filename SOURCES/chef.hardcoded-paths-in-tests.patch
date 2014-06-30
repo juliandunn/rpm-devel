@@ -1,0 +1,46 @@
+diff -Nur chef-11.12.4.old/spec/integration/client/ipv6_spec.rb chef-11.12.4/spec/integration/client/ipv6_spec.rb
+--- chef-11.12.4.old/spec/integration/client/ipv6_spec.rb	2014-06-29 23:04:37.000000000 -0400
++++ chef-11.12.4/spec/integration/client/ipv6_spec.rb	2014-06-30 12:53:10.000000000 -0400
+@@ -76,7 +76,7 @@
+ 
+   let(:chef_dir) { File.join(File.dirname(__FILE__), "..", "..", "..", "bin") }
+ 
+-  let(:chef_client_cmd) { %Q[chef-client -c "#{path_to('config/client.rb')}" -lwarn] }
++  let(:chef_client_cmd) { %Q[ruby #{chef_dir}/chef-client -c "#{path_to('config/client.rb')}" -lwarn] }
+ 
+   after do
+     FileUtils.rm_rf(cache_path)
+diff -Nur chef-11.12.4.old/spec/integration/knife/cookbook_api_ipv6_spec.rb chef-11.12.4/spec/integration/knife/cookbook_api_ipv6_spec.rb
+--- chef-11.12.4.old/spec/integration/knife/cookbook_api_ipv6_spec.rb	2014-06-29 23:04:37.000000000 -0400
++++ chef-11.12.4/spec/integration/knife/cookbook_api_ipv6_spec.rb	2014-06-30 12:54:11.000000000 -0400
+@@ -62,6 +62,7 @@
+     end
+ 
+     let(:chef_dir) { File.join(File.dirname(__FILE__), "..", "..", "..", "bin") }
++    let(:knife) { "ruby #{chef_dir}/knife" }
+ 
+     let(:knife_config_flag) { "-c '#{path_to("config/knife.rb")}'" }
+ 
+@@ -88,7 +89,7 @@
+         end
+ 
+         it "successfully uploads a cookbook" do
+-          shell_out!("knife cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
++          shell_out!("#{knife} cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
+           versions_list_json = Chef::HTTP::Simple.new("http://[::1]:8889").get("/cookbooks/apache2", "accept" => "application/json")
+           versions_list = Chef::JSONCompat.from_json(versions_list_json)
+           versions_list["apache2"]["versions"].should_not be_empty
+@@ -96,11 +97,11 @@
+ 
+         context "and the cookbook has been uploaded to the server" do
+           before do
+-            shell_out!("knife cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
++            shell_out!("#{knife} cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
+           end
+ 
+           it "downloads the cookbook" do
+-            s = shell_out!("knife cookbook download apache2 #{knife_config_flag} -d #{cache_path}", :cwd => chef_dir)
++            s = shell_out!("#{knife} cookbook download apache2 #{knife_config_flag} -d #{cache_path}", :cwd => chef_dir)
+             Dir["#{cache_path}/*"].map {|entry| File.basename(entry)}.should include("apache2-0.0.0")
+           end
+         end

@@ -15,6 +15,7 @@ URL: https://github.com/opscode/chef
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0: chef.gemspec.patch
 Patch1: chef.ffi-yajl.patch
+Patch2: chef.hardcoded-paths-in-tests.patch
 Requires: ruby(release)
 Requires: ruby(rubygems) 
 Requires: rubygem(mixlib-config)
@@ -47,8 +48,12 @@ BuildRequires: rubygem(rest-client)
 BuildRequires: rubygem(chef-zero)
 BuildRequires: rubygem(highline)
 BuildRequires: rubygem(net-ssh)
+BuildRequires: rubygem(net-ssh-multi)
 BuildRequires: rubygem(ffi-yajl)
 BuildRequires: rubygem(mime-types)
+# Needed by tests
+BuildRequires: git
+BuildRequires: hostname
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -74,6 +79,7 @@ gem unpack %{SOURCE0}
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -106,7 +112,7 @@ rm -rf %{buildroot}%{gem_instdir}/distro/common/markdown
 # Run the test suite
 %check
 pushd .%{gem_instdir}
-# rspec -Ilib
+rspec -Ilib
 popd
 
 %files
