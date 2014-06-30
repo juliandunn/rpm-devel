@@ -1,0 +1,165 @@
+diff -Nur chef-11.12.4.old/lib/chef/config_fetcher.rb chef-11.12.4/lib/chef/config_fetcher.rb
+--- chef-11.12.4.old/lib/chef/config_fetcher.rb	2014-06-30 03:04:32.000000000 +0000
++++ chef-11.12.4/lib/chef/config_fetcher.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -18,7 +18,7 @@
+       config_data = read_config
+       begin
+         Chef::JSONCompat.from_json(config_data)
+-      rescue JSON::ParserError => error
++      rescue FFI_Yajl::ParseError => error
+         Chef::Application.fatal!("Could not parse the provided JSON file (#{config_location}): " + error.message, 2)
+       end
+     end
+diff -Nur chef-11.12.4.old/lib/chef/encrypted_data_bag_item/decryptor.rb chef-11.12.4/lib/chef/encrypted_data_bag_item/decryptor.rb
+--- chef-11.12.4.old/lib/chef/encrypted_data_bag_item/decryptor.rb	2014-06-30 03:04:32.000000000 +0000
++++ chef-11.12.4/lib/chef/encrypted_data_bag_item/decryptor.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -17,7 +17,7 @@
+ #
+ 
+ require 'yaml'
+-require 'yajl'
++require 'ffi_yajl'
+ require 'openssl'
+ require 'base64'
+ require 'digest/sha2'
+@@ -121,8 +121,8 @@
+       end
+ 
+       def for_decrypted_item
+-        Yajl::Parser.parse(decrypted_data)["json_wrapper"]
+-      rescue Yajl::ParseError
++        FFI_Yajl::Parser.parse(decrypted_data)["json_wrapper"]
++      rescue FFI_Yajl::ParseError
+         # convert to a DecryptionFailure error because the most likely scenario
+         # here is that the decryption step was unsuccessful but returned bad
+         # data rather than raising an error.
+diff -Nur chef-11.12.4.old/lib/chef/encrypted_data_bag_item/encryptor.rb chef-11.12.4/lib/chef/encrypted_data_bag_item/encryptor.rb
+--- chef-11.12.4.old/lib/chef/encrypted_data_bag_item/encryptor.rb	2014-06-30 03:04:32.000000000 +0000
++++ chef-11.12.4/lib/chef/encrypted_data_bag_item/encryptor.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -19,7 +19,7 @@
+ require 'base64'
+ require 'digest/sha2'
+ require 'openssl'
+-require 'yajl'
++require 'ffi_yajl'
+ require 'chef/encrypted_data_bag_item'
+ require 'chef/encrypted_data_bag_item/unsupported_encrypted_data_bag_item_format'
+ 
+@@ -111,7 +111,7 @@
+       # Strings) that do not produce valid JSON when serialized without the
+       # wrapper.
+       def serialized_data
+-        Yajl::Encoder.encode(:json_wrapper => plaintext_data)
++        FFI_Yajl::Encoder.encode(:json_wrapper => plaintext_data)
+       end
+     end
+ 
+diff -Nur chef-11.12.4.old/lib/chef/json_compat.rb chef-11.12.4/lib/chef/json_compat.rb
+--- chef-11.12.4.old/lib/chef/json_compat.rb	2014-06-30 03:04:33.000000000 +0000
++++ chef-11.12.4/lib/chef/json_compat.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -17,8 +17,8 @@
+ 
+ # Wrapper class for interacting with JSON.
+ 
+-require 'json'
+-require 'yajl'
++require 'ffi_yajl'
++require 'ffi_yajl/json_gem'  # XXX: parts of chef require JSON gem's Hash#to_json monkeypatch
+ 
+ class Chef
+   class JSONCompat
+@@ -40,20 +40,9 @@
+ 
+     class <<self
+ 
+-      # See CHEF-1292/PL-538. Increase the max nesting for JSON, which defaults
+-      # to 19, and isn't enough for some (for example, a Node within a Node)
+-      # structures.
+-      def opts_add_max_nesting(opts)
+-        if opts.nil? || !opts.has_key?(:max_nesting)
+-          opts = opts.nil? ? Hash.new : opts.clone
+-          opts[:max_nesting] = JSON_MAX_NESTING
+-        end
+-        opts
+-      end
+-
+       # Just call the JSON gem's parse method with a modified :max_nesting field
+       def from_json(source, opts = {})
+-        obj = ::Yajl::Parser.parse(source)
++        obj = ::FFI_Yajl::Parser.parse(source)
+ 
+         # JSON gem requires top level object to be a Hash or Array (otherwise
+         # you get the "must contain two octets" error). Yajl doesn't impose the
+@@ -99,11 +88,11 @@
+       end
+ 
+       def to_json(obj, opts = nil)
+-        obj.to_json(opts_add_max_nesting(opts))
++        obj.to_json(opts)
+       end
+ 
+       def to_json_pretty(obj, opts = nil)
+-        ::JSON.pretty_generate(obj, opts_add_max_nesting(opts))
++        ::JSON.pretty_generate(obj, opts)
+       end
+ 
+ 
+diff -Nur chef-11.12.4.old/lib/chef/knife/core/object_loader.rb chef-11.12.4/lib/chef/knife/core/object_loader.rb
+--- chef-11.12.4.old/lib/chef/knife/core/object_loader.rb	2014-06-30 03:04:33.000000000 +0000
++++ chef-11.12.4/lib/chef/knife/core/object_loader.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -16,6 +16,8 @@
+ # limitations under the License.
+ #
+ 
++require 'ffi_yajl'
++
+ class Chef
+   class Knife
+     module Core
+@@ -83,7 +85,7 @@
+         def object_from_file(filename)
+           case filename
+           when /\.(js|json)$/
+-            r = Yajl::Parser.parse(IO.read(filename))
++            r = FFI_Yajl::Parser.parse(IO.read(filename))
+ 
+             # Chef::DataBagItem doesn't work well with the json_create method
+             if @klass == Chef::DataBagItem
+diff -Nur chef-11.12.4.old/lib/chef/provider/remote_file/cache_control_data.rb chef-11.12.4/lib/chef/provider/remote_file/cache_control_data.rb
+--- chef-11.12.4.old/lib/chef/provider/remote_file/cache_control_data.rb	2014-06-30 03:04:34.000000000 +0000
++++ chef-11.12.4/lib/chef/provider/remote_file/cache_control_data.rb	2014-06-30 03:21:39.000000000 +0000
+@@ -140,7 +140,7 @@
+ 
+         def load_data
+           Chef::JSONCompat.from_json(load_json_data)
+-        rescue Chef::Exceptions::FileNotFound, Yajl::ParseError
++        rescue Chef::Exceptions::FileNotFound, FFI_Yajl::ParseError, JSON::ParserError
+           false
+         end
+ 
+diff -Nur chef-11.12.4.old/spec/unit/knife/bootstrap_spec.rb chef-11.12.4/spec/unit/knife/bootstrap_spec.rb
+--- chef-11.12.4.old/spec/unit/knife/bootstrap_spec.rb	2014-06-30 03:04:38.000000000 +0000
++++ chef-11.12.4/spec/unit/knife/bootstrap_spec.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -94,8 +94,8 @@
+     @knife.instance_variable_set("@template_file", @knife.config[:template_file])
+     template_string = @knife.read_template
+     @knife.parse_options(["-j", '{"foo":{"bar":"baz"}}'])
+-    expected_hash = Yajl::Parser.new.parse('{"foo":{"bar":"baz"},"run_list":[]}')
+-    actual_hash = Yajl::Parser.new.parse(@knife.render_template(template_string))
++    expected_hash = FFI_Yajl::Parser.new.parse('{"foo":{"bar":"baz"},"run_list":[]}')
++    actual_hash = FFI_Yajl::Parser.new.parse(@knife.render_template(template_string))
+     actual_hash.should == expected_hash
+   end
+ 
+diff -Nur chef-11.12.4.old/spec/unit/provider/remote_file/cache_control_data_spec.rb chef-11.12.4/spec/unit/provider/remote_file/cache_control_data_spec.rb
+--- chef-11.12.4.old/spec/unit/provider/remote_file/cache_control_data_spec.rb	2014-06-30 03:04:39.000000000 +0000
++++ chef-11.12.4/spec/unit/provider/remote_file/cache_control_data_spec.rb	2014-06-30 03:20:46.000000000 +0000
+@@ -190,7 +190,7 @@
+       it "truncates the file cache path to 102 characters" do
+         normalized_cache_path = cache_control_data.send('sanitized_cache_file_basename')
+ 
+-        Chef::FileCache.should_receive(:store).with("remote_file/" + normalized_cache_path, cache_control_data.json_data)              
++        Chef::FileCache.should_receive(:store).with("remote_file/" + normalized_cache_path, cache_control_data.json_data)
+ 
+         cache_control_data.save
+ 
