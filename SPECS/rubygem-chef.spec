@@ -20,6 +20,9 @@ Patch2: chef.hardcoded-paths-in-tests.patch
 # Fixed in >= 11.12.4
 # https://github.com/opscode/chef/commit/a5fc932b6f24a89a499fdc98655120cd816417f7
 Patch3: chef.chef-zero-port.patch
+# Fixed in >= 11.12.4
+# https://github.com/opscode/chef/commit/8230ee5bf36cfeb56f31724bfa11c2824f567b65
+Patch4: chef.expired-spec-certs.patch
 Requires: ruby(release)
 Requires: ruby(rubygems) 
 Requires: rubygem(mixlib-config)
@@ -83,6 +86,8 @@ gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 # Create the gem as gem install only works on a gem file
