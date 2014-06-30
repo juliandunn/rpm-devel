@@ -1,5 +1,5 @@
 Name:           perl-WWW-Shorten
-Version:        3.04
+Version:        3.05
 Release:        1%{?dist}
 Summary:        Interface to URL shortening sites
 License:        Artistic 2.0
@@ -48,6 +48,12 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_mandir}/man3/*
 
 %changelog
+* Sat Jun 07 2014 Julian C. Dunn <jdunn@aquezada.com> - 3.05-1
+- Upgrade to 3.05 (bz#1095263)
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.04-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon Aug 26 2013 Julian C. Dunn <jdunn@aquezada.com> - 3.04-1
 - Upgrade to 3.04 (bz#1000526)
 
