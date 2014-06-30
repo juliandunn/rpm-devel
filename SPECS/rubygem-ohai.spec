@@ -6,7 +6,7 @@ Version: 7.0.4
 Release: 1%{?dist}
 Summary: Ohai profiles your system and emits JSON
 Group: Development/Languages
-License: ASL
+License: ASL 2.0
 URL: http://github.com/opscode/ohai
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0: ohai-ffi-yajl.patch
