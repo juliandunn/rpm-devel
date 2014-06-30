@@ -1,15 +1,12 @@
-commit a5fc932b6f24a89a499fdc98655120cd816417f7
-Author: John Keiser <jkeiser@opscode.com>
-Date:   Tue May 27 11:23:28 2014 -0700
+Note that this patch will only apply after the foregoing
+chef.hardcoded-paths-in-tests.patch, because of line numbering differences.
+This patch is already in Chef trunk and can be removed in Chef >= 11.14.x
 
-    Listen for the default port 8900, not 8889
+diff -Nur chef-11.12.4/spec/integration/client/ipv6_spec.rb chef-11.12.4.reallynew/spec/integration/client/ipv6_spec.rb
+--- chef-11.12.4/spec/integration/client/ipv6_spec.rb	2014-06-30 16:53:10.000000000 +0000
++++ chef-11.12.4.reallynew/spec/integration/client/ipv6_spec.rb	2014-06-30 21:18:32.000000000 +0000
+@@ -62,7 +62,7 @@
 
-diff --git a/spec/integration/client/ipv6_spec.rb b/spec/integration/client/ipv6_spec.rb
-index 1417153..bb4889b 100644
---- a/spec/integration/client/ipv6_spec.rb
-+++ b/spec/integration/client/ipv6_spec.rb
-@@ -62,7 +62,7 @@ END_VALIDATION_PEM
- 
    let(:basic_config_file) do
      <<-END_CLIENT_RB
 -chef_server_url "http://[::1]:8889"
@@ -17,12 +14,11 @@ index 1417153..bb4889b 100644
  validation_key '#{path_to('config/validator.pem')}'
  cache_path '#{cache_path}'
  client_key '#{cache_path}/client.pem'
-diff --git a/spec/integration/knife/cookbook_api_ipv6_spec.rb b/spec/integration/knife/cookbook_api_ipv6_spec.rb
-index bde449e..ad7d5e8 100644
---- a/spec/integration/knife/cookbook_api_ipv6_spec.rb
-+++ b/spec/integration/knife/cookbook_api_ipv6_spec.rb
-@@ -74,7 +74,7 @@ END_VALIDATION_PEM
- 
+diff -Nur chef-11.12.4/spec/integration/knife/cookbook_api_ipv6_spec.rb chef-11.12.4.reallynew/spec/integration/knife/cookbook_api_ipv6_spec.rb
+--- chef-11.12.4/spec/integration/knife/cookbook_api_ipv6_spec.rb	2014-06-30 16:54:11.000000000 +0000
++++ chef-11.12.4.reallynew/spec/integration/knife/cookbook_api_ipv6_spec.rb	2014-06-30 21:19:09.000000000 +0000
+@@ -75,7 +75,7 @@
+
          let(:knife_rb_content) do
            <<-END_CLIENT_RB
 -chef_server_url "http://[::1]:8889"
@@ -30,10 +26,10 @@ index bde449e..ad7d5e8 100644
  syntax_check_cache_path '#{cache_path}'
  client_key '#{path_to('config/knifeuser.pem')}'
  node_name 'whoisthisis'
-@@ -89,7 +89,7 @@ END_CLIENT_RB
- 
+@@ -90,7 +90,7 @@
+
          it "successfully uploads a cookbook" do
-           shell_out!("knife cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
+           shell_out!("#{knife} cookbook upload apache2 #{knife_config_flag}", :cwd => chef_dir)
 -          versions_list_json = Chef::HTTP::Simple.new("http://[::1]:8889").get("/cookbooks/apache2", "accept" => "application/json")
 +          versions_list_json = Chef::HTTP::Simple.new("http://[::1]:8900").get("/cookbooks/apache2", "accept" => "application/json")
            versions_list = Chef::JSONCompat.from_json(versions_list_json)
