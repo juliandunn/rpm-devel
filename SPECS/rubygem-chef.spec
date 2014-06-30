@@ -15,7 +15,11 @@ URL: https://github.com/opscode/chef
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0: chef.gemspec.patch
 Patch1: chef.ffi-yajl.patch
+# https://github.com/opscode/chef/pull/1583
 Patch2: chef.hardcoded-paths-in-tests.patch
+# Fixed in >= 11.12.4
+# https://github.com/opscode/chef/commit/a5fc932b6f24a89a499fdc98655120cd816417f7
+Patch3: chef.chef-zero-port.patch
 Requires: ruby(release)
 Requires: ruby(rubygems) 
 Requires: rubygem(mixlib-config)
@@ -60,7 +64,6 @@ Provides: rubygem(%{gem_name}) = %{version}
 %description
 A systems integration framework, built to bring the benefits of configuration
 management to your entire infrastructure.
-
 
 %package doc
 Summary: Documentation for %{name}
