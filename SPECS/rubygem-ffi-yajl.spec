@@ -15,7 +15,7 @@ Patch2: ffi-yajl.vendoring.patch
 Patch3: ffi-yajl.old-rspec.patch
 %{!?el6:Requires: ruby(release)}
 Requires: ruby(rubygems) 
-Requires: ruby(ffi)
+Requires: rubygem(ffi)
 Requires: yajl
 %{!?el6:BuildRequires: ruby(release)}
 BuildRequires: rubygems-devel 
