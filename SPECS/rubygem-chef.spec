@@ -43,22 +43,27 @@ Requires: rubygem(diff-lcs) >= 1.2.4
 Requires: rubygem(chef-zero) >= 2.0.2
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel 
-BuildRequires: ruby 
+BuildRequires: ruby
+BuildRequires: rubygem(mixlib-config)
+BuildRequires: rubygem(mixlib-cli)
+BuildRequires: rubygem(mixlib-log)
+BuildRequires: rubygem(mixlib-authentication)
+BuildRequires: rubygem(mixlib-shellout)
+BuildRequires: rubygem(ohai)
+BuildRequires: rubygem(rest-client)
+BuildRequires: rubygem(mime-types)
+BuildRequires: rubygem(ffi-yajl)
+BuildRequires: rubygem(net-ssh)
+BuildRequires: rubygem(net-ssh-multi)
+BuildRequires: rubygem(highline)
+BuildRequires: rubygem(erubis)
+BuildRequires: rubygem(diff-lcs)
+BuildRequires: rubygem(chef-zero)
+# The following are needed for tests
 BuildRequires: rubygem(rack) 
-# BuildRequires: rubygem(rspec_junit_formatter) 
 BuildRequires: rubygem(rspec-core)
 BuildRequires: rubygem(rspec-expectations)
 BuildRequires: rubygem(rspec-mocks)
-BuildRequires: rubygem(mixlib-authentication)
-BuildRequires: rubygem(erubis)
-BuildRequires: rubygem(rest-client)
-BuildRequires: rubygem(chef-zero)
-BuildRequires: rubygem(highline)
-BuildRequires: rubygem(net-ssh)
-BuildRequires: rubygem(net-ssh-multi)
-BuildRequires: rubygem(ffi-yajl)
-BuildRequires: rubygem(mime-types)
-# Needed by tests
 BuildRequires: git
 BuildRequires: hostname
 BuildArch: noarch
