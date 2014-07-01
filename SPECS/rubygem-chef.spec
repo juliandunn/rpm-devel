@@ -6,7 +6,7 @@
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
 Name: rubygem-%{gem_name}
-Version: 11.12.4
+Version: 11.12.8
 Release: 1%{?dist}
 Summary: The Chef configuration management system
 Group: Development/Languages
@@ -152,8 +152,8 @@ popd
 %doc %{gem_instdir}/distro
 
 %changelog
-* Mon Jun 30 2014 Julian C. Dunn (<jdunn@aquezada.com>) - 11.12.4-1
-- Major update to 11.12.4
+* Mon Jun 30 2014 Julian C. Dunn (<jdunn@aquezada.com>) - 11.12.8-1
+- Major update to 11.12.8
 
 * Sun May 27 2012 Jonas Courteau <rpms@courteau.org> - 0.10.10-2
 - Fixed license short name

@@ -1,5 +1,5 @@
---- chef-11.12.4.old/chef.gemspec	2014-06-30 03:06:29.000000000 +0000
-+++ chef-11.12.4/chef.gemspec	2014-06-30 03:11:08.000000000 +0000
+--- chef-11.12.8.old/chef.gemspec	2014-06-30 21:12:39.000000000 -0400
++++ chef-11.12.8/chef.gemspec	2014-06-30 21:20:33.000000000 -0400
 @@ -30,15 +30,13 @@
        s.add_runtime_dependency(%q<ohai>, ["~> 7.0.4"])
        s.add_runtime_dependency(%q<rest-client>, ["< 1.7.0", ">= 1.0.4"])
@@ -12,8 +12,9 @@
        s.add_runtime_dependency(%q<highline>, [">= 1.6.9", "~> 1.6"])
        s.add_runtime_dependency(%q<erubis>, ["~> 2.7"])
        s.add_runtime_dependency(%q<diff-lcs>, [">= 1.2.4", "~> 1.2"])
-       s.add_runtime_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
+-      s.add_runtime_dependency(%q<chef-zero>, ["< 2.1", ">= 2.0.2"])
 -      s.add_runtime_dependency(%q<pry>, ["~> 0.9"])
++      s.add_runtime_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
        s.add_development_dependency(%q<rake>, ["~> 10.1.0"])
        s.add_development_dependency(%q<rack>, [">= 0"])
        s.add_development_dependency(%q<rspec_junit_formatter>, [">= 0"])
@@ -29,8 +30,9 @@
        s.add_dependency(%q<highline>, [">= 1.6.9", "~> 1.6"])
        s.add_dependency(%q<erubis>, ["~> 2.7"])
        s.add_dependency(%q<diff-lcs>, [">= 1.2.4", "~> 1.2"])
-       s.add_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
+-      s.add_dependency(%q<chef-zero>, ["< 2.1", ">= 2.0.2"])
 -      s.add_dependency(%q<pry>, ["~> 0.9"])
++      s.add_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
        s.add_dependency(%q<rake>, ["~> 10.1.0"])
        s.add_dependency(%q<rack>, [">= 0"])
        s.add_dependency(%q<rspec_junit_formatter>, [">= 0"])
@@ -46,8 +48,9 @@
      s.add_dependency(%q<highline>, [">= 1.6.9", "~> 1.6"])
      s.add_dependency(%q<erubis>, ["~> 2.7"])
      s.add_dependency(%q<diff-lcs>, [">= 1.2.4", "~> 1.2"])
-     s.add_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
+-    s.add_dependency(%q<chef-zero>, ["< 2.1", ">= 2.0.2"])
 -    s.add_dependency(%q<pry>, ["~> 0.9"])
++    s.add_dependency(%q<chef-zero>, [">= 2.0.2", "~> 2.0"])
      s.add_dependency(%q<rake>, ["~> 10.1.0"])
      s.add_dependency(%q<rack>, [">= 0"])
      s.add_dependency(%q<rspec_junit_formatter>, [">= 0"])
