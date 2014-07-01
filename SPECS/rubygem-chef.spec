@@ -133,8 +133,9 @@ popd
 %{_bindir}/chef-shell
 %{_bindir}/shef
 %{_bindir}/chef-apply
-%{_mandir}/man1/knife-*
-%{_mandir}/man8/chef-*
+%{_mandir}/man1/knife*
+%{_mandir}/man1/chef*
+%{_mandir}/man8/chef*
 # Irrelevant on non-Windows
 %exclude %{_bindir}/chef-service-manager
 %{gem_instdir}/bin
