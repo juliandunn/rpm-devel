@@ -1,5 +1,5 @@
 Name:           ec2-api-tools
-Version:        1.6.14.1
+Version:        1.7.4.0
 Release:        1%{?dist}
 Summary:        Amazon EC2 Command-Line Tools
 
@@ -20,9 +20,9 @@ Requires:       jpackage-utils
 %endif
 Requires:       java >= 1.5
 Requires:       apache-commons-cli 
-Requires:       commons-codec 
+Requires:       apache-commons-codec 
 Requires:       apache-commons-discovery 
-Requires:       commons-httpclient 
+Requires:       jakarta-commons-httpclient 
 Requires:       apache-commons-logging
 Requires:       bcprov 
 Requires:       bea-stax-api 
