@@ -1,5 +1,5 @@
 Name:           gecode
-Version:        4.2.1
+Version:        4.4.0
 Release:        1%{?dist}
 Summary:        Generic constraint development environment
 
@@ -139,6 +139,27 @@ mv doc/html ${RPM_BUILD_ROOT}%{_pkgdocdir}
 %doc examples/*
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 4.3.3-3
+- Rebuilt for GCC 5 C++11 ABI change
+
+* Mon Jan 26 2015 Petr Machata <pmachata@redhat.com> - 4.3.3-2
+- Rebuild for boost 1.57.0
+
+* Fri Jan 23 2015 Julian C. Dunn <jdunn@aquezada.com> - 4.3.3-1
+- Update to 4.3.3
+
+* Mon Sep 29 2014 Julian C. Dunn <jdunn@aquezada.com> - 4.3.0-1
+- Update to 4.3.0
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.2.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.2.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 4.2.1-2
+- Rebuild for boost 1.55.0
+
 * Sat Nov 16 2013 Julian C. Dunn <jdunn@aquezada.com> 4.2.1-1
 - Update to 4.2.1
 
