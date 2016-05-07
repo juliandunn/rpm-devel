@@ -1,5 +1,5 @@
 Name:           perl-Net-Twitter
-Version:        4.01004
+Version:        4.01020
 Release:        1%{?dist}
 Summary:        Perl interface to the Twitter API
 License:        GPL+ or Artistic
@@ -7,49 +7,64 @@ Group:          Development/Libraries
 URL:            http://search.cpan.org/dist/Net-Twitter/
 Source0:        http://www.cpan.org/authors/id/M/MM/MMIMS/Net-Twitter-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  perl(base)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Carp)
+BuildRequires:  perl
+BuildRequires:  perl(Module::Build)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+# Run-time:
 BuildRequires:  perl(Carp::Clan)
-BuildRequires:  perl(CPAN)
-BuildRequires:  perl(Crypt::SSLeay) >= 0.5
+BuildRequires:  perl(Class::Load)
 BuildRequires:  perl(Data::Visitor::Callback)
-BuildRequires:  perl(DateTime) >= 0.51
-BuildRequires:  perl(DateTime::Format::Strptime) >= 1.09
-BuildRequires:  perl(Devel::StackTrace) >= 1.21
-BuildRequires:  perl(Digest::HMAC_SHA1)
+BuildRequires:  perl(DateTime)
+BuildRequires:  perl(DateTime::Format::Strptime)
+BuildRequires:  perl(Devel::StackTrace)
 BuildRequires:  perl(Digest::SHA)
 BuildRequires:  perl(Encode)
-BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(HTML::Entities)
 BuildRequires:  perl(HTTP::Request::Common)
-BuildRequires:  perl(HTTP::Response)
 BuildRequires:  perl(JSON)
+BuildRequires:  perl(JSON::MaybeXS)
 BuildRequires:  perl(List::Util)
-BuildRequires:  perl(LWP::UserAgent) >= 5.819
-BuildRequires:  perl(Module::Build)
-BuildRequires:  perl(Moose) >= 0.9
+# LWP::Protocol::https to support HTTPS protocol
+# LWP::Protocol::https not used at tests
+BuildRequires:  perl(Moose)
 BuildRequires:  perl(Moose::Exporter)
+BuildRequires:  perl(Moose::Meta::Method)
 BuildRequires:  perl(Moose::Role)
-BuildRequires:  perl(MooseX::Aliases)
 BuildRequires:  perl(MooseX::Role::Parameterized)
-BuildRequires:  perl(namespace::autoclean) >= 0.09
+BuildRequires:  perl(namespace::autoclean)
 BuildRequires:  perl(Net::Netrc)
-BuildRequires:  perl(Net::OAuth) >= 0.25
-BuildRequires:  perl(Pod::Coverage) >= 0.19
+BuildRequires:  perl(Net::OAuth)
+BuildRequires:  perl(overload)
 BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Test::Deep)
+BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(Try::Tiny)
+BuildRequires:  perl(URI)
+BuildRequires:  perl(URI::Escape)
+# Tests:
+BuildRequires:  perl(base)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(HTTP::Response)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(LWP::UserAgent) >= 5.819
+BuildRequires:  perl(Net::OAuth::Message)
 BuildRequires:  perl(Test::Fatal)
 BuildRequires:  perl(Test::More) >= 0.88
-BuildRequires:  perl(Test::Pod) >= 1.00
-BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
-BuildRequires:  perl(Test::Spelling) >= 0.11
 BuildRequires:  perl(Test::Warn)
-BuildRequires:  perl(Time::HiRes)
-BuildRequires:  perl(Try::Tiny) >= 0.03
-BuildRequires:  perl(URI) >= 1.4
-BuildRequires:  perl(URI::Escape)
-Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+BuildRequires:  perl(utf8)
+# Optional tests:
+# Test::Pod::Coverage 1.04 not used
+BuildRequires:  perl(Test::Deep)
+# Test::Pod 1.41 not used
+# Test::Spelling 0.11 not used
+Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
+Requires:       perl(Moose::Meta::Method)
+# LWP::Protocol::https to support HTTPS protocol
+Requires:       perl(LWP::Protocol::https)
 Requires:       perl(Net::Netrc)
 
 %description
@@ -60,7 +75,7 @@ http://dev.twitter.com/doc for a full description of the Twitter APIs.
 %setup -q -n Net-Twitter-%{version}
 
 %build
-%{__perl} Build.PL --installdirs vendor
+perl Build.PL --installdirs vendor
 ./Build
 
 %install
@@ -76,6 +91,39 @@ http://dev.twitter.com/doc for a full description of the Twitter APIs.
 %{_mandir}/man3/*
 
 %changelog
+* Fri May 06 2016 Julian C. Dunn <jdunn@aquezada.com> - 4.01020-1
+- Upgrade to 4.01020 (bz#1323532)
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.01010-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Thu Jun 25 2015 Petr Pisar <ppisar@redhat.com> - 4.01010-1
+- 4.01010 bump
+
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.01008-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
+* Mon Jun 08 2015 Jitka Plesnikova <jplesnik@redhat.com> - 4.01008-3
+- Perl 5.22 rebuild
+
+* Sat Feb 07 2015 Ralf Corsépius <corsepiu@fedoraproject.org> - 4.01008-2
+- Rebuild w/ perl-generators-1.03 to get rid of bogus deps.
+
+* Thu Jan 22 2015 Julian C. Dunn <jdunn@aquezada.com> - 4.01008-1
+- Upgrade to 4.01008 (bz#1166391)
+
+* Wed Sep 03 2014 Jitka Plesnikova <jplesnik@redhat.com> - 4.01005-2
+- Perl 5.20 rebuild
+
+* Mon Sep 01 2014 Julian C. Dunn <jdunn@aquezada.com> - 4.01005-1
+- Upgrade to 4.01005 (bz#1130048)
+
+* Mon Sep 01 2014 Jitka Plesnikova <jplesnik@redhat.com> - 4.01004-3
+- Perl 5.20 rebuild
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.01004-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon Apr 14 2014 Julian C. Dunn <jdunn@aquezada.com> - 4.01004-1
 - Upgrade to 4.01004 (bz#1087334)
 
